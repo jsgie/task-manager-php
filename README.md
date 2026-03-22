@@ -91,14 +91,16 @@ A default admin user is automatically created:
 
 ### Screenshots
 
+### Screenshots
+
 Login Page
-![Login Page](assets/screenshots/login.png)
+![Login Page](public/screenshots/login.png)
 
 Register Page
-![Register Page](assets/screenshots/register.png)
+![Register Page](public/screenshots/register.png)
 
-Task Page
-![Tasks Page](assets/screenshots/task.png)
+Tasks Page
+![Tasks Page](public/screenshots/task.png)
 
 
 
