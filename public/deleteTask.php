@@ -3,7 +3,6 @@ header('Content-Type: application/json');
 session_start();
 require_once('../src/User.php');
 require_once('../src/Task.php');
-
 User::checkAuth();
 $task = new Task();
 
