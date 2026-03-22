@@ -1,0 +1,77 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.auth-box {
+    background: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    width: 300px;
+    text-align: center;
+}
+
+.auth-box h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.auth-box input[type="text"],
+.auth-box input[type="password"] {
+    width: 100%;
+    padding: 12px 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.auth-box button {
+    width: 100%;
+    padding: 12px;
+    background: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-box button:hover {
+    background: #45a049;
+    transform: scale(1.03);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.error {
+    color: red;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.success {
+    color: green;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.auth-box a {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+    text-decoration: none;
+}
+
+.auth-box a:hover {
+    text-decoration: underline;
+}
