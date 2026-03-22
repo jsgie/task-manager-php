@@ -25,11 +25,12 @@ class Database
 
     private function setup()
     {
-        // Users table
+        // Users table with username and user_email
         $this->db->query("
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                username VARCHAR(50) UNIQUE NOT NULL,
+                username VARCHAR(50) NOT NULL,
+                user_email VARCHAR(100) UNIQUE NOT NULL,
                 password VARCHAR(255) NOT NULL
             )
         ");
@@ -47,10 +48,12 @@ class Database
         ");
 
         // Seed admin if not exists
-        $stmt = $this->db->prepare("INSERT IGNORE INTO users (id, username, password) VALUES (1, ?, ?)");
-        $username = "admin";
+        $stmt = $this->db->prepare("INSERT IGNORE INTO users (id, username, user_email, password) VALUES (1, ?, ?, ?)");
+        $username = "Admin";
+        $user_email = "admin@example.com";
         $password = password_hash("password", PASSWORD_DEFAULT);
-        $stmt->bind_param("ss", $username, $password);
+        $stmt->bind_param("sss", $username, $user_email, $password);
         $stmt->execute();
     }
 }
+?>

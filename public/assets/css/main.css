@@ -24,6 +24,7 @@ body {
 }
 
 .auth-box input[type="text"],
+.auth-box input[type="email"],
 .auth-box input[type="password"] {
     width: 100%;
     padding: 12px 10px;

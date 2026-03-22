@@ -1,18 +1,19 @@
 <?php
 session_start();
 require_once __DIR__ . '/../src/User.php';
+
 $user = new User();
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = trim($_POST['username']);
+    $user_email = trim($_POST['user_email']);
     $password = trim($_POST['password']);
 
-    if ($user->login($username, $password)) {
-        header("Location: tasks.php"); // Redirect to tasks page
+    if ($user->login($user_email, $password)) {
+        header("Location: tasks.php");
         exit();
     } else {
-        $error = "Invalid username or password";
+        $error = "Invalid email or password";
     }
 }
 ?>
@@ -29,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1>Login</h1>
     <?php if($error) echo "<div class='error'>{$error}</div>"; ?>
     <form method="POST">
-        <input type="text" name="username" placeholder="Username" required>
+        <input type="email" name="user_email" placeholder="Email" required>
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>
     </form>

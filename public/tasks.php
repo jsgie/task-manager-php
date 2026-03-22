@@ -3,8 +3,14 @@ session_start();
 require_once __DIR__ . '/../src/User.php';
 require_once __DIR__ . '/../src/Task.php';
 
-User::checkAuth();
+$user = new User();
 $task = new Task();
+
+// Redirect to login if user is not logged in
+if (!$user->isLoggedIn()) {
+    header("Location: index.php");
+    exit();
+}
 $user_id = $_SESSION['user_id'];
 $status = $_GET['status'] ?? '';
 $tasks = $task->getTasks($user_id, $status);
