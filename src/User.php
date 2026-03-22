@@ -1,6 +1,5 @@
 <?php
-require_once 'Database.php';
-
+require_once __DIR__ . '/Database.php';
 class User
 {
     private $db;
@@ -17,11 +16,17 @@ class User
         $stmt->bind_param("s", $user_email);
         $stmt->execute();
         $stmt->store_result();
-        if ($stmt->num_rows > 0) return false;
+        if ($stmt->num_rows > 0) {
+            return false; // Email already exists
+        }
 
+        // Hash password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Default role can be omitted if not needed
         $stmt = $this->db->prepare("INSERT INTO users (username, user_email, password) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $username, $user_email, $hashedPassword);
+
         return $stmt->execute();
     }
 
@@ -31,17 +36,19 @@ class User
         $stmt->bind_param("s", $user_email);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result($id, $username, $hashedPassword);
 
-        if ($stmt->num_rows == 1) {
-            $stmt->fetch();
-            if (password_verify($password, $hashedPassword)) {
-                $_SESSION['user_id'] = $id;
-                $_SESSION['user_email'] = $user_email;
-                $_SESSION['username'] = $username;
-                return true;
-            }
+        if ($stmt->num_rows === 0) return false;
+
+        $stmt->bind_result($id, $username, $hashedPassword);
+        $stmt->fetch();
+
+        if (password_verify($password, $hashedPassword)) {
+            $_SESSION['user_id'] = $id;
+            $_SESSION['username'] = $username;
+            $_SESSION['user_email'] = $user_email;
+            return true;
         }
+
         return false;
     }
 
@@ -49,11 +56,4 @@ class User
     {
         return isset($_SESSION['user_id']);
     }
-
-    public function logout()
-    {
-        session_unset();
-        session_destroy();
-    }
 }
-?>

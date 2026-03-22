@@ -3,7 +3,12 @@ header('Content-Type: application/json');
 session_start();
 require_once('../src/User.php');
 require_once('../src/Task.php');
-User::checkAuth();
+$user = new User();
+// redirect if not logged in
+if (!$user->isLoggedIn()) {
+    echo json_encode(['success'=>false]);
+    exit();
+}
 $task = new Task();
 
 $id = $_POST['id'] ?? 0;

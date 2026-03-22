@@ -78,7 +78,7 @@ http://localhost:8000
 
 A default admin user is automatically created:
 
-- Username: admin
+- Username: admin@example.com
 - Password: password
 
 ### Usage
@@ -87,6 +87,18 @@ A default admin user is automatically created:
 - Edit tasks by clicking the pencil icon
 - Delete tasks using the trash icon
 - Filter tasks by status (Active / Completed)
+
+
+### Screenshots
+
+Login Page
+![Login Page](assets/screenshots/login.png)
+
+Register Page
+![Register Page](assets/screenshots/register.png)
+
+Task Page
+![Tasks Page](assets/screenshots/task.png)
 
 
 
