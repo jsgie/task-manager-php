@@ -91,8 +91,6 @@ A default admin user is automatically created:
 
 ### Screenshots
 
-### Screenshots
-
 Login Page
 ![Login Page](public/screenshots/login.png)
 
