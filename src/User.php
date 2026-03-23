@@ -4,11 +4,26 @@ class User
 {
     private $db;
 
+    /**
+     * Constructor
+     *
+     * Initializes the database connection using the singleton Database class.
+     */
     public function __construct()
     {
         $this->db = Database::getInstance()->db;
     }
 
+    /**
+     * Register a new user.
+     *
+     * Check if the user is already exist, hash the password
+     *
+     * @param string $username The username of the user
+     * @param string $user_email The user email of the user tha is unique
+     * @param string $password the password of the user
+     * @return bool
+     */
     public function register($username, $user_email, $password)
     {
         // Check if email already exists
@@ -23,13 +38,20 @@ class User
         // Hash password
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // Default role can be omitted if not needed
+        // inser a new user
         $stmt = $this->db->prepare("INSERT INTO users (username, user_email, password) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $username, $user_email, $hashedPassword);
 
         return $stmt->execute();
     }
 
+    /**
+     * Log in as user
+     *
+     * @param string $user_email
+     * @param string $password
+     * @return bool
+     */
     public function login($user_email, $password)
     {
         $stmt = $this->db->prepare("SELECT id, username, password FROM users WHERE user_email = ? LIMIT 1");
@@ -52,6 +74,11 @@ class User
         return false;
     }
 
+    /**
+     * Check if the user is Logged in
+     * 
+     * @return bool
+     */
     public function isLoggedIn()
     {
         return isset($_SESSION['user_id']);

@@ -4,6 +4,10 @@ class Database
     private static $instance = null;
     public $db;
 
+    /**
+     * Private constructor to prevent multiple instances
+     * Intiatise the database connection and set  up table
+     */
     private function __construct()
     {
         $this->db = new mysqli('localhost', 'taskuser', 'password', 'task_manager');
@@ -15,6 +19,10 @@ class Database
         $this->setup();
     }
 
+    /**
+     * Function to get Instance
+     * @return Database|null
+     */
     public static function getInstance()
     {
         if (!self::$instance) {
@@ -23,6 +31,11 @@ class Database
         return self::$instance;
     }
 
+    /**
+     * Sets up the database tables if they do not exist .
+     * Create the table user and tasks
+     * @return void
+     */
     private function setup()
     {
         // Users table with username and user_email

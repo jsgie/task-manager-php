@@ -5,11 +5,25 @@ class Task
 {
     private $db;
 
+    /**
+     * Constructor
+     *
+     * Initializes the database connection using the singleton Database class.
+     */
     public function __construct()
     {
         $this->db = Database::getInstance()->db;
     }
 
+    /**
+     * Create a new task
+     *
+     * @param string $name The name/title of the task
+     * @param string $due_date The date in  'YYYY-MM-DD' format
+     * @param string $status Task status ('active' or 'completed')
+     * @param int $user_id ID of the user who owns the task
+     * @return bool
+     */
     public function create($name, $due_date, $status, $user_id)
     {
         $stmt = $this->db->prepare("INSERT INTO tasks (name, due_date, status, user_id) VALUES (?, ?, ?, ?)");
@@ -17,6 +31,15 @@ class Task
         return $stmt->execute();
     }
 
+    /**
+     * Update an existing task
+     *
+     * @param int $id Task ID
+     * @param string $name title of the task
+     * @param string $due_date the date in in 'YYYY-MM-DD' format
+     * @param string $status Task status ('active' or 'completed')
+     * @return bool t
+     */
     public function updateTask($id, $name, $due_date, $status)
     {
         $stmt = $this->db->prepare("UPDATE tasks SET name=?, due_date=?, status=? WHERE id=?");
@@ -24,6 +47,11 @@ class Task
         return $stmt->execute();
     }
 
+    /**
+     * Delete a task
+     * @param  int $task_id id of the task
+     * @return bool
+     */
     public function delete($task_id)
     {
         $stmt = $this->db->prepare("DELETE FROM tasks WHERE id=?");
@@ -31,6 +59,12 @@ class Task
         return $stmt->execute();
     }
 
+    /**
+     * Get tasks for a user
+     * @param int $user_id id of the user
+     * @param String $status
+     * @return array
+     */
     public function getTasks($user_id, $status = null)
     {
         if ($status) {
