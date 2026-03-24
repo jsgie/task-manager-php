@@ -17,6 +17,24 @@ $due_date = $_POST['due_date'] ?? '';
 $status = $_POST['status'] ?? 'active';
 $user_id = $_SESSION['user_id'];
 
+if (empty($name) || empty($due_date)) {
+    echo json_encode(['success' => false, 'message' => 'Name and due date are required']);
+    exit();
+}
+
+// Valid date
+if (!strtotime($due_date)) {
+    echo json_encode(['success' => false, 'message' => 'Invalid date']);
+    exit();
+}
+
+// Valid status
+$allowedStatus = ['active', 'completed'];
+if (!in_array($status, $allowedStatus)) {
+    echo json_encode(['success' => false, 'message' => 'Invalid status']);
+    exit();
+}
+
 // Create the task and get new ID
 $newId = $task->create($name, $due_date, $status, $user_id);
 if ($newId) {
@@ -30,5 +48,5 @@ if ($newId) {
         ]
     ]);
 } else {
-    echo json_encode(['success' => false]);
+    echo json_encode(['success'=>false, 'message'=>'Could not create task']);
 }

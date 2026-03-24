@@ -122,6 +122,7 @@ $tasks = $task->getTasks($user_id, $status);
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+                <div id="addTaskError" class="text-danger mb-3"></div>
                 <div class="mb-3"><label class="form-label">Task Name</label><input type="text" name="name" class="form-control" required></div>
                 <div class="mb-3"><label class="form-label">Due Date</label><input type="date" name="due_date" class="form-control" required></div>
                 <div class="mb-3"><label class="form-label">Status</label><select name="status" class="form-select"><option value="active">Active</option><option value="completed">Completed</option></select></div>
@@ -140,6 +141,7 @@ $tasks = $task->getTasks($user_id, $status);
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+                <div id="editTaskError" class="text-danger mb-3"></div>
                 <input type="hidden" name="id" id="editId">
                 <div class="mb-3"><label class="form-label">Task Name</label><input type="text" name="name" id="editName" class="form-control" required></div>
                 <div class="mb-3"><label class="form-label">Due Date</label><input type="date" name="due_date" id="editDueDate" class="form-control" required></div>
@@ -184,52 +186,63 @@ $tasks = $task->getTasks($user_id, $status);
         editModal.show();
     }
 
-    // AJAX: Edit Task
     document.getElementById('editTaskForm').addEventListener('submit', function(e){
         e.preventDefault();
         let formData = new FormData(this);
-        fetch('updateTask.php',{method:'POST',body:formData})
-            .then(res=>res.json())
-            .then(data=>{
+        let errorDiv = document.getElementById('editTaskError');
+        errorDiv.textContent = ''; // clear previous errors
+
+        fetch('updateTask.php', { method:'POST', body:formData })
+            .then(res => res.json())
+            .then(data => {
                 if(data.success){
-                    const row=document.getElementById('taskRow'+formData.get('id'));
-                    row.children[0].textContent=formData.get('name');
-                    row.children[1].textContent=formData.get('due_date');
-                    row.children[2].textContent=formData.get('status');
+                    const row = document.getElementById('taskRow'+formData.get('id'));
+                    row.children[0].textContent = formData.get('name');
+                    row.children[1].textContent = formData.get('due_date');
+                    row.children[2].textContent = formData.get('status');
                     editModal.hide();
-                } else alert('Update failed');
-            });
+                } else {
+                    errorDiv.textContent = data.message || 'Update failed';
+                }
+            })
+            .catch(() => { errorDiv.textContent = 'Server error'; });
     });
 
 
     document.getElementById('addTaskForm').addEventListener('submit', function(e){
         e.preventDefault();
-        let formData=new FormData(this);
-        fetch('createTask.php',{method:'POST',body:formData})
-            .then(res=>res.json())
-            .then(data=>{
+        let formData = new FormData(this);
+        let errorDiv = document.getElementById('addTaskError');
+        errorDiv.textContent = ''; // clear previous errors
+
+        fetch('createTask.php', { method:'POST', body:formData })
+            .then(res => res.json())
+            .then(data => {
                 if(data.success){
-                    const t=data.task;
-                    const tbody=document.getElementById('taskTableBody');
-                    const row=document.createElement('tr');
-                    row.id='taskRow'+t.id;
-                    row.innerHTML=`
-                <td>${t.name}</td>
-                <td>${t.due_date}</td>
-                <td>${t.status}</td>
-                <td>
-                    <button class="btn-icon text-primary" onclick="openEditModal(${t.id}, '${t.name.replace(/'/g,"\\'")}', '${t.due_date}', '${t.status}')" title="Edit">
-                        <i class="fa-solid fa-pencil"></i>
-                    </button>
-                    <button class="btn-icon text-danger" onclick="deleteTask(${t.id})" title="Delete">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </td>`;
+                    const t = data.task;
+                    const tbody = document.getElementById('taskTableBody');
+                    const row = document.createElement('tr');
+                    row.id = 'taskRow'+t.id;
+                    row.innerHTML = `
+                    <td>${t.name}</td>
+                    <td>${t.due_date}</td>
+                    <td>${t.status}</td>
+                    <td>
+                        <button class="btn-icon text-primary" onclick="openEditModal(${t.id}, '${t.name.replace(/'/g,"\\'")}', '${t.due_date}', '${t.status}')" title="Edit">
+                            <i class="fa-solid fa-pencil"></i>
+                        </button>
+                        <button class="btn-icon text-danger" onclick="deleteTask(${t.id})" title="Delete">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>`;
                     tbody.appendChild(row);
                     this.reset();
                     addModal.hide();
-                } else alert('Add failed');
-            });
+                } else {
+                    errorDiv.textContent = data.message || 'Add failed';
+                }
+            })
+            .catch(() => { errorDiv.textContent = 'Server error'; });
     });
 
     // AJAX: Delete Task

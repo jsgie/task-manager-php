@@ -36,17 +36,17 @@ class Task
      *
      * @param int $id Task ID
      * @param string $name title of the task
+     * @param int $user_id
      * @param string $due_date the date in in 'YYYY-MM-DD' format
      * @param string $status Task status ('active' or 'completed')
      * @return bool t
      */
-    public function updateTask($id, $name, $due_date, $status)
+    public function updateTask($id, $name, $due_date, $status, $user_id)
     {
-        $stmt = $this->db->prepare("UPDATE tasks SET name=?, due_date=?, status=? WHERE id=?");
-        $stmt->bind_param("sssi", $name, $due_date, $status, $id);
+        $stmt = $this->db->prepare("UPDATE tasks SET name=?, due_date=?, status=? WHERE id=? AND user_id=?");
+        $stmt->bind_param("sssii", $name, $due_date, $status, $id, $user_id);
         return $stmt->execute();
     }
-
     /**
      * Delete a task
      * @param  int $task_id id of the task
